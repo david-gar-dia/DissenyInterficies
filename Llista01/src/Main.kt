@@ -226,12 +226,10 @@ fun main() {
         for(index in 1..limitInput)
         {
             curResult = 0;
-            for(innerIndex in 1..index)
+            print("1 ");
+            for(innerIndex in 2..index)
             {
-                if(innerIndex == 1)
-                    print(innerIndex );
-                else
-                    print("+ $innerIndex ");
+                print("+ $innerIndex ");
                 curResult += innerIndex;
             }
             println("= $curResult");
@@ -239,15 +237,153 @@ fun main() {
     }
     fun Ejercicio10(num1 : Int, num2 : Int) : Int {
         var residue : Int;
+        var a : Int = num1;
+        var b : Int = num2;
 
         if(num1 <= 0 || num2 <= 0)
             throw Exception("Ningún número puede ser menor o igual que 0");
 
         do
         {
-            residue = num1 % num2;
-            num1 = num2;
-            num2 = residue;
+            residue = a % b;
+            a = b;
+            b = residue;
         }while(residue != 0)
+
+        return a;
     }
+    fun Ejercicio11() : Unit {
+        var scanner = Scanner(System.`in`);
+        var num1 : Int = 1;
+        var num2 : Int = 1;
+        var aux : Int;
+        var numbersShown : Int;
+
+        print("Cuántos números quieres que se muestren?: ");
+        numbersShown = scanner.nextInt();
+        if(numbersShown < 0)
+            throw Exception("El número introducido no puede ser menor a 0");
+
+        if(numbersShown != 0)
+            print(num1);
+        for(index in 1 until numbersShown)
+        {
+            aux = num1 + num2;
+            num1 = num2;
+            num2 = aux;
+            print(", $num1");
+        }
+    }
+    fun Ejercicio12() : Unit {
+        var scanner = Scanner(System.`in`);
+        var optionChosen : Int;
+        var radius : Double;
+        var result : Double;
+
+        println("Elija qué quiere calcular:\n1) Longitud de circunferencia\n2) Área de un círculo\n3) Volumen de un círculo");
+        optionChosen = scanner.nextInt();
+
+        while(optionChosen != 1 && optionChosen != 2 && optionChosen != 3)
+        {
+            println("La opción dada no es correcta.\n1) Longitud de circunferencia\n2) Área de un círculo\n3) Volumen de un círculo");
+            optionChosen = scanner.nextInt();
+        }
+
+        print("Determine el radio para calcular: ");
+        radius = scanner.nextDouble();
+        if(radius <= 0)
+            throw Exception("El radio debe ser mayor que 0")
+
+        when (optionChosen)
+        {
+            1 -> {
+                result = 2 * Math.PI * radius;
+                print("La longitud de un circunferencia de radio ");
+            };
+            2 -> {
+                result = Math.PI * Math.pow(radius, 2.0);
+                print("El área de un círculo de radio ");
+            };
+            3 -> {
+                result = (4/3).toDouble() * Math.PI * Math.pow(radius, 3.0);
+                print("El volumen de una esfera de radio ")
+            };
+            else -> result = 0.0;
+        }
+
+        result = Math.round(result * 100).toDouble() / 100;
+        println("$radius sería $result");
+    }
+    fun Ejercicio13() : Unit {
+        var givenChar : Char;
+        var charAsInt : Int;
+        var result : Char;
+
+        print("Introduce un caracter: ");
+        givenChar = System.`in`.read().toChar();
+        charAsInt = givenChar.code;
+
+        if(charAsInt >= 97 && charAsInt < 123)
+            charAsInt -= 32;
+
+        result = charAsInt.toChar();
+
+        if(result == givenChar)
+            println("$givenChar -> Ningún cambio");
+        else
+            println("$givenChar -> $result");
+    }
+
+    var scanner = Scanner(System.`in`);
+    var optionChosen : Int;
+
+    println("Selecciona un ejercicio que verificar:");
+    println("1) Ejercicio 1");
+    println("2) Ejercicio 2");
+    println("3) Ejercicio 3");
+    println("4) Ejercicio 4");
+    println("5) Ejercicio 5");
+    println("6) Ejercicio 6");
+    println("7) Ejercicio 7");
+    println("8) Ejercicio 8");
+    println("9) Ejercicio 9");
+    println("10) Ejercicio 10");
+    println("11) Ejercicio 11");
+    println("12) Ejercicio 12");
+    println("13) Ejercicio 13");
+
+    optionChosen = scanner.nextInt();
+
+    println("");
+    when(optionChosen) {
+        1 -> Ejercicio1();
+        2 -> Ejercicio2();
+        3 -> Ejercicio3();
+        4 -> Ejercicio4();
+        5 -> Ejercicio5();
+        6 -> Ejercicio6();
+        7 -> Ejercicio7();
+        8 -> Ejercicio8();
+        9 -> Ejercicio9();
+        10 -> {
+            var num1 : Int;
+            var num2 : Int;
+            var result : Int;
+
+            print("Introduzca un número: ");
+            num1 = scanner.nextInt();
+
+            print("Introduza otro número: ");
+            num2 = scanner.nextInt();
+
+            result = Ejercicio10(num1, num2);
+            println("El máximo común divisor de $num1 y $num2 es $result");
+        };
+        11-> Ejercicio11();
+        12 -> Ejercicio12();
+        13 -> Ejercicio13();
+        else -> throw Exception("Por favor, escoja una opción válida");
+    }
+
+
 }
