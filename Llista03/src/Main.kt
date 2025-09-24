@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import javax.swing.DefaultListSelectionModel
 
 fun main() {
 }
@@ -179,4 +180,148 @@ fun ejercicio8(vector : MutableList<Int>):Unit {
 
     println("El número más pequeño es: $lowestNumber");
     println("Se encuentra en el índice: $positionLowestNumber");
+}
+fun ejercicio9(table : MutableList<MutableList<Int>>):Unit {
+    val scanner : Scanner = Scanner(System.`in`);
+    var lowestNumber : Int = Int.MAX_VALUE;
+    var lowestNumberX : Int = -1;
+    var lowestNumberY : Int = -1;
+
+    table.forEachIndexed { index, element ->
+        element.forEachIndexed { innerIndex, innerElement ->
+            if(innerElement < lowestNumber)
+            {
+                lowestNumber = innerElement;
+                lowestNumberX = innerIndex;
+                lowestNumberY = index;
+            }
+        }
+    }
+
+    println("El número más pequeño es: $lowestNumber");
+    println("Se encuentra en la posición: ($lowestNumberX, $lowestNumberY)");
+}
+fun ejercicio10(vector : MutableList<Int>):Unit {
+    val scanner : Scanner = Scanner(System.`in`);
+    var lowestNumber : Int = Int.MAX_VALUE;
+    var highestNumber : Int = Int.MIN_VALUE;
+    var sumNumbers : Int = 0;
+    val quantityNumbers : Int = vector.count();
+    var average : Double;
+
+    vector.forEach { element ->
+        if(element < lowestNumber)
+            lowestNumber = element;
+        if(element > highestNumber)
+            highestNumber = element;
+        sumNumbers += element;
+    }
+
+    average = sumNumbers.toDouble() / quantityNumbers;
+
+    println("El número más pequeño es: $lowestNumber");
+    println("El número más grande es: $highestNumber");
+    println("El promedio de todos los número es: $average");
+}
+fun ejercicio11(vector : MutableList<Int>):MutableList<Int> {
+    val result : MutableList<Int> = mutableListOf();
+
+    for(i in vector.count()-1 downTo 0)
+        result.add(vector[i]);
+
+    return result;
+}
+fun ejercicio12(vector1 : MutableList<Int>, vector2 : MutableList<Int>):MutableList<Int> {
+    val result : MutableList<Int> = mutableListOf();
+    var countV1 : Int = 0;
+    var countV2 : Int = 0;
+
+    while(countV1 < vector1.count() && countV2 < vector2.count())
+        if(vector1[countV1] == vector2[countV2])
+        {
+            result.add(vector1[countV1]);
+            countV1++;
+            countV2++;
+        }
+        else if(vector1[countV1] < vector2[countV2])
+            countV1++;
+        else
+            countV2++;
+
+    return result;
+}
+fun ejercicio13(vector1 : MutableList<Int>, vector2 : MutableList<Int>):MutableList<Int> {
+    val result : MutableList<Int> = mutableListOf();
+    var countV1 : Int = 0;
+    var countV2 : Int = 0;
+
+    while(countV1 < vector1.count() && countV2 < vector2.count())
+        if(vector1[countV1] == vector2[countV2])
+        {
+            countV1++;
+            countV2++;
+        }
+        else if(vector1[countV1] < vector2[countV2])
+        {
+            result.add(vector1[countV1]);
+            countV1++;
+        }
+        else
+        {
+            result.add(vector2[countV2]);
+            countV2++;
+        }
+
+    if(countV1 < vector1.count())
+        for(i in countV1..<vector1.count())
+            result.add(vector1[i]);
+    else
+        for(i in countV2..<vector2.count())
+            result.add(vector2[i]);
+
+    return result;
+}
+fun ejercicio14(vector1 : MutableList<Int>, vector2 : MutableList<Int>):MutableList<Int> {
+    val result : MutableList<Int> = mutableListOf();
+    var countV1 : Int = 0;
+    var countV2 : Int = 0;
+
+    while(countV1 < vector1.count() && countV2 < vector2.count())
+        if(vector1[countV1] == vector2[countV2])
+        {
+            result.add(vector1[countV1]);
+            countV1++;
+            countV2++;
+        }
+        else if(vector1[countV1] < vector2[countV2])
+        {
+            result.add(vector1[countV1]);
+            countV1++;
+        }
+        else
+        {
+            result.add(vector2[countV2]);
+            countV2++;
+        }
+
+    if(countV1 < vector1.count())
+        for(i in countV1..<vector1.count())
+            result.add(vector1[i]);
+    else
+        for(i in countV2..<vector2.count())
+            result.add(vector2[i]);
+
+    return result;
+}
+fun ejercicio15(list : MutableList<String>): HashMap<String, Int> {
+    var result : HashMap<String, Int> = hashMapOf();
+
+    list.forEach { element ->
+        if(result.containsKey(element))
+            result[element] = result[element]?.plus(1) ?: 0;
+        else
+            result.put(element, 1);
+    }
+
+    return result;
 }
