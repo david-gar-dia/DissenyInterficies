@@ -3,7 +3,7 @@ class Manuscrit (
     autorPersones : List<String> = listOf(),
     autorEntitats : List<String> = listOf(),
     titol : String = "",
-    descripcio : String = "",
+    descripcio: List<String> = listOf(),
     genere : String = "",
     dipositLegal : String = "",
     pais : String = "",

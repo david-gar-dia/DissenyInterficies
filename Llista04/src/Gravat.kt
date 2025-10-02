@@ -3,7 +3,7 @@ class Gravat (
     autorPersones : List<String> = listOf(),
     autorEntitats : List<String> = listOf(),
     titol : String = "",
-    descripcio : String = "",
+    descripcio: List<String> = listOf(),
     genere : String = "",
     dipositLegal : String = "",
     pais : String = "",
@@ -11,9 +11,9 @@ class Gravat (
     versioDigital : String = "",
     tipus : TipusDocument = TipusDocument.Gravat,
     textOCR : String = "",
-    iSBN : String = "",
     tema : String = "",
-) : Publicacio(idBNE, autorPersones, autorEntitats, titol, descripcio, genere, dipositLegal, pais, idioma, versioDigital, tipus, textOCR, iSBN, tema)
+    iSBN : String = "",
+) : Publicacio(idBNE, autorPersones, autorEntitats, titol, descripcio, genere, dipositLegal, pais, idioma, versioDigital, tipus, textOCR, tema, iSBN)
 {
     override fun toString(): String {
         return super.toString();

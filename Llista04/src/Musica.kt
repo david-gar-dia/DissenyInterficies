@@ -3,7 +3,7 @@ class Musica (
     autorPersones : List<String> = listOf(),
     autorEntitats : List<String> = listOf(),
     titol : String = "",
-    descripcio : String = "",
+    descripcio: List<String> = listOf(),
     genere : String = "",
     dipositLegal : String = "",
     pais : String = "",
@@ -11,8 +11,9 @@ class Musica (
     versioDigital : String = "",
     tipus : TipusDocument = TipusDocument.Musica,
     val editorMusical : String = "",
-    val formaComposicio : String = "",
-    val interprets : String = ""
+    val interprets : String = "",
+    val formaComposicio : String = ""
+
 ) : So(idBNE, autorPersones, autorEntitats, titol, descripcio, genere, dipositLegal, pais, idioma, versioDigital, tipus)
 {
     override fun toString(): String {
@@ -21,6 +22,8 @@ class Musica (
         sb.appendLine("\tEditor musical: $editorMusical");
         sb.appendLine("\tForma composició: $formaComposicio");
         sb.appendLine("\tInterprets: $interprets");
+        sb.appendLine("------------------------------------------------------------------------------");
+
 
         return sb.toString();
     }

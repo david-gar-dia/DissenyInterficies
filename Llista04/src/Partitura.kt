@@ -3,7 +3,7 @@ class Partitura (
     autorPersones : List<String> = listOf(),
     autorEntitats : List<String> = listOf(),
     titol : String = "",
-    descripcio : String = "",
+    descripcio: List<String> = listOf(),
     genere : String = "",
     dipositLegal : String = "",
     pais : String = "",
@@ -17,6 +17,7 @@ class Partitura (
         val sb : StringBuilder = StringBuilder(super.toString());
 
         sb.appendLine("\tForma composició: $formaComposicio");
+        sb.appendLine("------------------------------------------------------------------------------");
 
         return sb.toString();
     }

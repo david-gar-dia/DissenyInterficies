@@ -3,7 +3,7 @@ abstract class Document(
     val autorPersones : List<String> = listOf(),
     val autorEntitats : List<String> = listOf(),
     val titol : String = "",
-    val descripcio : String = "",
+    val descripcio: List<String> = listOf(),
     val genere : String = "",
     val dipositLegal : String = "",
     val pais : String = "",
@@ -40,12 +40,15 @@ abstract class Document(
         }
         sb.appendLine("\tTítol: $titol");
         sb.appendLine("\tDescripció:");
-        sb.appendLine("\t\t$descripcio");
+        descripcio.forEach() {
+            sb.appendLine("\t\t$it");
+        }
         sb.appendLine("\tGènere: $genere");
         sb.appendLine("\tDipòsit Legal: $dipositLegal");
         sb.appendLine("\tPaís: $pais");
         sb.appendLine("\tIdioma: $idioma");
         sb.appendLine("\tVersió Digital: $versioDigital");
+        sb.appendLine("------------------------------------------------------------------------------");
 
         return sb.toString();
     }
