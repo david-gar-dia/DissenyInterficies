@@ -1,12 +1,175 @@
+import java.io.File
 import java.lang.IllegalArgumentException;
 import java.util.Scanner;
-import java.io.File;
 import java.io.FileWriter
-import java.nio.file.StandardOpenOption
+import javax.swing.DefaultListSelectionModel
 
 fun main() {
+    val scanner : Scanner = Scanner(System.`in`);
+    val biblioteca : MutableList<Document> = mutableListOf();
+    var optionChosen : Int;
+    var incorrectOption : Boolean = false;
 
+    do
+    {
+        netejarConsola();
+        if(incorrectOption)
+        {
+            println("L'opció introduit no es válid.\n");
+            incorrectOption = false;
+        }
+        mostrarMenu();
+        optionChosen = scanner.nextInt();
+        scanner.nextLine();
+
+        netejarConsola();
+
+        when(optionChosen) {
+            1 -> {
+                println("Introdueix el nom del fitxer: ");
+                var curFilename = scanner.nextLine();
+                println("Introdueix el tipus de document a dins del fitxer: ");
+                var curTipusString = scanner.nextLine();
+                var curDocTipus = TipusDocument.valueOf(curTipusString.substring(0,1).uppercase() + curTipusString.substring(1).lowercase())
+
+                var curLlista = llegeix(curFilename, curDocTipus);
+                curLlista.forEach {
+                    biblioteca.add(it);
+                };
+                println("Operació completat, ${curLlista.count()} documents afegits.");
+                println("Prem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            2 -> {
+                println("Introdueix el nom del fitxer: ");
+                var curFilename = scanner.nextLine();
+
+                desa(curFilename, biblioteca);
+                println("Operació completat, la biblioteca es troba al fitxer ${curFilename}.");
+                println("Prem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            3 -> {
+                var curDocument = ompleDocument();
+
+                altaDocument(curDocument, biblioteca);
+                println("Operació completat, el nou document es el nombre ${biblioteca.count() - 1}.")
+                println("Prem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            4 -> {
+                println("Introdueix el idBNE del document a eliminar: ");
+                var curIdBNE = scanner.nextLine();
+
+                if(eliminaDocument(curIdBNE, biblioteca))
+                    println("El document ha segut eliminat amb éxit.");
+                else
+                    println("No existeix cap document amb aquest IdBNE.");
+
+                println("Prem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            5 -> {
+                println("Introdueix la posició del document a eliminar: ");
+                var curPosicio = scanner.nextInt();
+                scanner.nextLine();
+
+                if(eliminaPosicio(curPosicio, biblioteca))
+                    println("El document ha segut eliminat amb éxit.");
+                else
+                    println("No existeix cap document a aquesta posició.");
+
+                println("Prem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            6 -> {
+                println("Llista paisos: ")
+                llistaPaisos(biblioteca);
+
+                println("\nPrem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            7 -> {
+                println("Introdueix el pais per al que vols comprovar: ");
+                var curPais = scanner.nextLine();
+
+                llistaPais(curPais.lowercase(), biblioteca);
+                println("\nPrem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            8 -> {
+                println("Llista idiomas: ");
+                llistaIdiomes(biblioteca);
+
+                println("\nPrem cualsevol botó per continuar: ");
+                scanner.nextLine();
+            }
+            9 -> {
+                println("Introdueix el idioma per al que vols comprovar: ");
+                var curIdioma = scanner.nextLine();
+
+                llistaIdioma(curIdioma,biblioteca);
+                println("\nPrem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            10 -> {
+                println("Introdueix el IdBNE per a buscar: ");
+                var curIdBNE = scanner.nextLine();
+
+                llistaLlibre(curIdBNE, biblioteca);
+                println("\nPrem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            11 -> {
+                println("Introdueix la posició per a buscar: ");
+                var curPosicio = scanner.nextInt();
+                scanner.nextLine();
+
+                llistaPos(curPosicio, biblioteca);
+                println("\nPrem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            12 -> {
+                println("Introdueix la posició inicial per a buscar: ");
+                var curPosicioInicial = scanner.nextInt();
+                scanner.nextLine();
+
+                println("Introdueix la posició final per a buscar: ");
+                var curPosicioFinal = scanner.nextInt();
+                scanner.nextLine();
+
+                llistaRang(curPosicioInicial, curPosicioFinal, biblioteca);
+                println("\nPrem cualsevol botó per continuar...");
+                scanner.nextLine();
+            }
+            else -> incorrectOption = true;
+        }
+
+    } while(optionChosen != 13)
 }
+// Funciones de menu
+fun netejarConsola() {
+    for(i in 0..20)
+        println("");
+}
+fun mostrarMenu() {
+    println("1) Afegir fitxer de documents a la biblioteca");
+    println("2) Afegir contenits de biblioteca a fitxer");
+    println("3) Afegir un document nou a la biblioteca");
+    println("4) Eliminar un document de la biblioteca per idBNE");
+    println("5) Eliminar un document de la biblioteca per posició");
+    println("6) Llistar tots els diferents paisos de proviniència de la biblioteca");
+    println("7) Llistar tots els documents d'un pais determinat");
+    println("8) Llistar tots els diferents idiomas dels documents a la biblioteca");
+    println("9) Llistar tots els documents d'un idioma determinat");
+    println("10) Llistar un document per idBNE");
+    println("11) Llistar un llibre per posició");
+    println("12) Llistar un llibre per rang de posicions");
+    println("13) Sortir");
+    println("Tria una opció: ");
+}
+
+// Funciones de modificació de la biblioteca
 fun separa(sequenciaValors : String) : List<String> {
     val substringList : MutableList<String>;
     val result : List<String>;
@@ -177,18 +340,21 @@ fun converteix(dadesDocument : String, tipus : TipusDocument) : Document {
     return result;
 }
 fun llegeix(filename : String, tipus : TipusDocument) : List<Document> {
-    val scanner : Scanner = Scanner(filename);
+    val file : File = File("src/${filename}");
+    val scanner : Scanner = Scanner(file);
     val documentsList : MutableList<Document> = mutableListOf();
-    val result : List<Document> = listOf();
+    val result : List<Document>;
     var line : String;
 
     line = scanner.nextLine();
     line = scanner.nextLine();
-    while(line != "")
+    while(scanner.hasNextLine())
     {
         documentsList.add(converteix(line, tipus));
         line = scanner.nextLine();
     }
+
+    result = documentsList.toList();
 
     return result;
 }
@@ -292,7 +458,7 @@ fun desa(filename : String, biblioteca : MutableList<Document>) : Unit {
     }
     file.close();
 }
-fun ompleLlibre() : Document {
+fun ompleDocument() : Document {
     val result : Document;
     val scanner : Scanner = Scanner(System.`in`);
     var curAnswer : String;
@@ -510,35 +676,33 @@ fun ompleLlibre() : Document {
 
     return result;
 }
-fun altaLlibre(nouLlibre : Document, biblioteca: MutableList<Document>) : Unit {
+fun altaDocument(nouDocument : Document, biblioteca: MutableList<Document>) : Unit {
     var trobat : Boolean = false;
     var count : Int = 0;
 
-    trobat = biblioteca[count].idBNE == nouLlibre.idBNE;
     while(!trobat && count < biblioteca.count())
     {
+        trobat = biblioteca[count].idBNE == nouDocument.idBNE;
         count++;
-        trobat = biblioteca[count].idBNE == nouLlibre.idBNE;
     }
 
     if(trobat)
-        biblioteca[count] = nouLlibre;
+        biblioteca[count - 1] = nouDocument;
     else
-        biblioteca.add(nouLlibre);
+        biblioteca.add(nouDocument);
 }
-fun eliminaLlibre(idBNE : String, biblioteca: MutableList<Document>) : Boolean {
+fun eliminaDocument(idBNE : String, biblioteca: MutableList<Document>) : Boolean {
     var trobat : Boolean = false;
     var count : Int = 0;
 
-    trobat = biblioteca[count].idBNE == idBNE;
     while(!trobat && count < biblioteca.count())
     {
-        count++;
         trobat = biblioteca[count].idBNE == idBNE;
+        count++;
     }
 
     if(trobat)
-        biblioteca.removeAt(count);
+        biblioteca.removeAt(count - 1);
 
     return trobat;
 }
@@ -552,21 +716,90 @@ fun eliminaPosicio(position : Int, biblioteca: MutableList<Document>) : Boolean 
 
     return result;
 }
-fun llistaPaisos(biblioteca : MutableList<Document>) : List<String> {
+fun llistaPaisos(biblioteca : MutableList<Document>) : Unit {
     val differentCountries : MutableSet<String> = mutableSetOf();
-    val result : List<String>;
 
     biblioteca.forEach {
         differentCountries.add(it.pais);
     };
 
-    result = differentCountries.toList();
-
-    return result;
+    differentCountries.forEach {
+        println(it);
+    }
 }
 fun llistaPais(pais: String, biblioteca : MutableList<Document>) : Unit {
     biblioteca.forEach {
         if(it.pais == pais)
             println(it);
     }
+}
+fun llistaIdiomes(biblioteca : MutableList<Document>) : Unit {
+    val differentLanguages: MutableSet<String> = mutableSetOf();
+
+    biblioteca.forEach {
+        differentLanguages.add(it.idioma);
+    };
+
+    differentLanguages.forEach {
+        println(it);
+    }
+}
+fun llistaIdioma(idioma : String, biblioteca : MutableList<Document>) : Unit {
+    biblioteca.forEach {
+        if(it.idioma == idioma)
+            println(it);
+    }
+}
+fun llistaLlibre(idBNE : String, biblioteca: MutableList<Document>) : Boolean {
+    var found : Boolean = false;
+    var count : Int = 0;
+
+    while(count < biblioteca.count() && !found)
+    {
+        found = biblioteca[count].idBNE == idBNE;
+        count++;
+    }
+
+    if(found)
+        println(biblioteca[count - 1]);
+    else
+        println("No existeix cap document amb aquest idBNE");
+
+    return found;
+}
+fun llistaPos(posicio : Int, biblioteca : MutableList<Document>) : Boolean {
+    val exists : Boolean = posicio < biblioteca.count();
+
+    if(exists)
+        println(biblioteca[posicio]);
+    else
+        println("No existeix cap Document en aquesta posició");
+
+    return exists;
+}
+fun llistaRang(posicioInicio : Int, posicioFinal : Int, biblioteca: MutableList<Document>) : Boolean {
+    var existeixenDocuments : Boolean;
+    var pI : Int = posicioInicio;
+    var pF : Int = posicioFinal;
+
+    if (posicioInicio > posicioFinal)
+    {
+        pI = posicioFinal;
+        pF = posicioInicio;
+    }
+
+    existeixenDocuments = pI < biblioteca.count();
+
+    if(existeixenDocuments)
+    {
+        if(pF >= biblioteca.count())
+            pF = biblioteca.count() - 1;
+
+        for(i in pI..pF)
+            println(biblioteca[i]);
+    }
+    else
+        println("No existeix cap Document en el rang seleccionat");
+
+    return existeixenDocuments;
 }
