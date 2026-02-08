@@ -6,5 +6,5 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun MissionsApp() {
     val navigationController = rememberNavController();
-    AppNavigation(navigationController)
+    AppDrawer(navigationController);
 }
