@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +47,7 @@ import cat.montilivi.ui.navigation.NavigationGraphDrawer
 import cat.montilivi.ui.navigation.ZoneListDestination
 import cat.montilivi.ui.navigation.drawerTags
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun AppDrawer(navigationController: NavHostController) {
@@ -116,6 +118,9 @@ fun CompleteNavigationDrawer(
                             )
                         },
                         onClick = {
+                            coroutineScope.launch {
+                                drawerState.close();
+                            }
                             navigationController.navigate(tag.route) {
                                 popUpTo(navigationController.graph.findStartDestination().id){
                                     inclusive = false
@@ -171,15 +176,16 @@ fun MyScaffold(navigationController: NavHostController, currentDestination: NavD
                         navigationState.value?.destination?.hasRoute(CoverScreenDestination::class)
                             ?: false
                     IconButton(onClick = {
-                        if (!mainScreen)
-                            navigationController.navigateUp()
+                        coroutineScope.launch {
+                            if(!drawerState.isOpen)
+                                drawerState.open();
+                            else
+                                drawerState.close();
+                        }
                     }) {
                         Icon(
-                            imageVector = if (mainScreen)
-                                Icons.Default.Home
-                            else
-                                Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = "Home"
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Menu"
                         )
                     }
                 },
