@@ -12,6 +12,6 @@ fun MissionsApp() {
 
     when(navigationType) {
         NavigationType.DRAWER -> AppDrawer(navigationController);
-        NavigationType.TABS -> AppTabs(navigationController);
+        NavigationType.TABS -> AppTabs();
     }
 }
